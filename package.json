@@ -1,0 +1,15 @@
+{
+  "name": "@axolo/egg-route-match",
+  "version": "0.1.0",
+  "description": "Match route of egg.js by request object.",
+  "license": "MIT",
+  "author": "axolo",
+  "type": "commonjs",
+  "main": "src/index.js",
+  "files": [
+    "src"
+  ],
+  "scripts": {
+    "test": "node --test test/index.test.js"
+  }
+}
