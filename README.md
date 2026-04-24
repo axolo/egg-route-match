@@ -17,20 +17,18 @@ npm i @axolo/egg-route-match
 
 ## 使用
 
-```javascript
+```js
 const matchRoute = require('@axolo/egg-route-match');
 
 // 请求对象
-const req = {
-  method: 'GET',
-  path: '/user/123'
-};
+const req = { method: 'GET', path: '/user/123' };
 
 // 路由表（来自 Egg.js 的 app.router.stack）
 const routes = [
   { methods: ['GET', 'HEAD'], path: '/user/:id' },
+  { methods: ['GET', 'HEAD'], path: '/user/:id/post' },
+  { methods: ['PUT'], path: '/user/:id' },
   { methods: ['POST'], path: '/user' },
-  { methods: ['GET'], path: '/posts' }
 ];
 
 // 匹配路由
@@ -48,58 +46,24 @@ console.log(matched);
 
 #### 参数
 
-- `req` (Object): 请求对象
-  - `method` (String): HTTP 方法，如 `'GET'`, `'POST'` 等
-  - `path` (String): 请求路径，如 `'/user/123'`
-- `routes` (Array): 路由表，来自 Egg.js 的 `app.router.stack`
-  - 每个路由对象包含:
-    - `methods` (Array): 支持的 HTTP 方法数组
-    - `path` (String): 路由路径，支持动态参数
+|       参数        |  类型  |                          描述                           |
+| ----------------- | ------ | ------------------------------------------------------- |
+| req               | Object | 请求对象，如：`{ method: 'GET', path: '/user/123' }`    |
+| req.method        | String | HTTP 方法，如：`'GET'`                                  |
+| req.path          | String | 请求路径，如：`'/user/123'`                             |
+| routes            | Array  | 路由表，来自 Egg.js 的 `app.router.stack`               |
+| routes[i]         | Object | 路由对象，如：`{ methods: ['GET'], path: '/user/:id' }` |
+| routes[i].methods | Array  | 支持的 HTTP 方法数组，如：`['GET', 'HEAD']`             |
+| routes[i].path    | String | 路由路径，支持动态参数，如：`'/user/:id'`               |
 
 #### 返回
 
-- `Object|null`: 匹配的路由对象，包含 `method` 和 `path` 属性；如果没有匹配则返回 `null`
+未匹配到路由时，返回 `null`，否则返回匹配的路由对象。
 
-#### 示例
-
-```javascript
-// 静态路由匹配
-matchRoute(
-  { method: 'GET', path: '/posts' },
-  [{ methods: ['GET'], path: '/posts' }]
-);
-// 返回: { method: 'GET', path: '/posts' }
-
-// 动态路由匹配
-matchRoute(
-  { method: 'GET', path: '/user/123' },
-  [{ methods: ['GET'], path: '/user/:id' }]
-);
-// 返回: { method: 'GET', path: '/user/:id' }
-
-// 多方法匹配
-matchRoute(
-  { method: 'HEAD', path: '/user/123' },
-  [{ methods: ['GET', 'HEAD'], path: '/user/:id' }]
-);
-// 返回: { method: 'HEAD', path: '/user/:id' }
-
-// 不匹配的情况
-matchRoute(
-  { method: 'POST', path: '/user/123' },
-  [{ methods: ['GET'], path: '/user/:id' }]
-);
-// 返回: null
-```
-
-## 测试
-
-```bash
-npm test
-```
-
-## License
-
-MIT
+|     返回      |  类型  |                            描述                            |
+| ------------- | ------ | ---------------------------------------------------------- |
+| result        | Object | 匹配的路由对象，如：`{ method: 'GET', path: '/user/:id' }` |
+| result.method | String | 匹配的 HTTP 方法，如：`'GET'`                              |
+| result.path   | String | 匹配的路由路径，如：`'/user/:id'`                          |
 
 [Egg.js]: https://eggjs.org/
